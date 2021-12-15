@@ -1,3 +1,6 @@
+using AutoMapper;
+using Car.API.Infrastructure;
+using Car.Service.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,7 +29,10 @@ namespace Car.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            var _mappingProfile = new MapperConfiguration(mp => { mp.AddProfile(new MappingProfile()); });
+            IMapper mapper = _mappingProfile.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddTransient<IUserService,UserService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
