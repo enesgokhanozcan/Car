@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Car.Model.User
 {
-    public class UserViewModel : IUserCreateModel
+    public class UserViewModel
     {
+        public int Id { get; set; }
         public string Name { get ; set; }
         public string Surname { get; set; }
         public string UserName { get; set; }

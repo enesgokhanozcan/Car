@@ -13,12 +13,17 @@ namespace Car.Service.User
         {
             mapper = _mapper;
         }
-        public bool Login(string userName, string userPassword)
+        public General <UserViewModel>Login(UserLoginModel loginUser)
         {
-            bool result = false;
+            General<UserViewModel> result = new();
             using (var srv = new CarContext())
             {
-                result = srv.User.Any(a => !a.IsDeleted && a.IsActive && a.UserName == userName && a.Password == userPassword);
+                var _data = srv.User.FirstOrDefault(a => !a.IsDeleted && a.IsActive && a.UserName == loginUser.UserName && a.Password == loginUser.Password);
+                if (_data is not null)
+                {
+                    result.IsSuccess = true;
+                    result.Entity = mapper.Map<UserViewModel>(_data);
+                }
             }
 
             return result;
@@ -48,15 +53,10 @@ namespace Car.Service.User
             return result;
         }
 
-        private object General<T>()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public General<UserViewModel> Login(UserLoginModel user)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public General<UserViewModel> Login(UserLoginModel user)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
         public General<UserViewModel> Update(UserUpdateModel updatedUser, int id)
         {

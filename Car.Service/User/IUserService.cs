@@ -10,7 +10,7 @@ namespace Car.Service.User
 {
     public interface  IUserService
     {
-        public General<UserViewModel> Login(UserLoginModel user);
+        public General<UserViewModel> Login(UserLoginModel loginUser);
         public General<UserViewModel> Insert(UserCreateModel newUser);
         public General<UserViewModel> Update(UserUpdateModel updatedUser, int id);
         public General<UserViewModel> Delete(int id);

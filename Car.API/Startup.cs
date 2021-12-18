@@ -33,6 +33,7 @@ namespace Car.API
             IMapper mapper = _mappingProfile.CreateMapper();
             services.AddSingleton(mapper);
             services.AddTransient<IUserService,UserService>();
+            services.AddMemoryCache();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

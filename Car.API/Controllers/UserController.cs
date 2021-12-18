@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Car.API.Infrastructure;
 using Car.Model;
 using Car.Model.User;
 using Car.Service.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Car.API.Controllers
 {
@@ -14,7 +16,7 @@ namespace Car.API.Controllers
         private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public UserController(IUserService _userService,IMapper _mapper)
+        public UserController(IUserService _userService, IMapper _mapper, IMemoryCache _memoryCache) //: base(_memoryCache)
         {
             userService = _userService;
             mapper = _mapper;
@@ -23,7 +25,11 @@ namespace Car.API.Controllers
         [HttpPost]
         public General<UserViewModel> Insert([FromBody] UserCreateModel newUser)
         {
-            var result = false;
+            //General<UserViewModel> response = new General<UserViewModel>();
+            //if(CurrentUser is null)
+            //{
+            //    return response;
+            //}
             return userService.Insert(newUser);
         }
 
