@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Car.Model.Product;
 
 namespace Car.API.Infrastructure
 {
@@ -18,6 +19,9 @@ namespace Car.API.Infrastructure
 
             CreateMap<Car.Model.User.UserViewModel, Car.DB.Entities.User>();
             CreateMap<Car.DB.Entities.User, Car.Model.User.UserViewModel>();
+
+            CreateMap<InsertProduct, Car.DB.Entities.Car>();
+            CreateMap<Car.DB.Entities.Car, ProductDetail>();
         }
     }
 }

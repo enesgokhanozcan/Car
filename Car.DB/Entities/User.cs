@@ -9,6 +9,7 @@ namespace Car.DB.Entities
     {
         public User()
         {
+            Car = new HashSet<Car>();
             Category = new HashSet<Category>();
         }
 
@@ -25,6 +26,7 @@ namespace Car.DB.Entities
         public int Iuser { get; set; }
         public int? Uuser { get; set; }
 
+        public virtual ICollection<Car> Car { get; set; }
         public virtual ICollection<Category> Category { get; set; }
     }
 }

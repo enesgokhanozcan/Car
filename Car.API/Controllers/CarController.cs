@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Car.Model;
+using Car.Model.Product;
+using Car.Service.Product;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Car.API.Controllers
 {
@@ -6,23 +9,29 @@ namespace Car.API.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
-        //[HttpPost]
-        //public General<CarViewModel> Insert([FromBody] CarViewModel newCar)
-        //{
-        //    General<CarViewModel> response = new();
-        //    return response;
-        //}
-        //[HttpGet]
-        //public General<CarViewModel> GetList()
-        //{
-        //    General<CarViewModel> response = new();
-        //    return response;
-        //}
-        //[HttpGet("{id:int}")]
-        //public General<CarViewModel> GetById(int id)
-        //{
-        //    General<CarViewModel> response = new();
-        //    return response;
-        //}
+        private readonly IProductService productService;
+        public CarController(IProductService _productService)
+        {
+            productService = _productService;
+        }
+        [HttpPost]
+        public General<ProductDetail> Insert([FromBody] InsertProduct newCar)
+        {
+            General<ProductDetail> response = new();
+            response = productService.Insert(newCar);
+            return response;
+        }
+        [HttpGet]
+        public General<ListProduct> GetList()
+        {
+            General<ListProduct> response = new();
+            return response;
+        }
+        [HttpGet("{id:int}")]
+        public General<ProductDetail> GetById(int id)
+        {
+            General<ProductDetail> response = new();
+            return response;
+        }
     }
 }

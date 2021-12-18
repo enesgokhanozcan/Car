@@ -9,7 +9,6 @@ namespace Car.DB.Entities.DataContext
 {
     public partial class CarContext : DbContext
     {
-        //Scaffold-DbContext "Server=.;Database=Car;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -ContextDir Entities/DataContext -Context CarContext -Project Car.DB -StartupProject Car.DB -NoPluralize -Force
         public CarContext()
         {
         }
@@ -38,8 +37,6 @@ namespace Car.DB.Entities.DataContext
 
             modelBuilder.Entity<Car>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.Property(e => e.CaseType)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -60,8 +57,6 @@ namespace Car.DB.Entities.DataContext
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.Idate)
                     .HasColumnType("datetime")
                     .HasColumnName("IDate")
@@ -81,13 +76,13 @@ namespace Car.DB.Entities.DataContext
                 entity.Property(e => e.Uuser).HasColumnName("UUser");
 
                 entity.HasOne(d => d.Category)
-                    .WithMany()
+                    .WithMany(p => p.Car)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Car_Category");
 
                 entity.HasOne(d => d.IuserNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Car)
                     .HasForeignKey(d => d.Iuser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Car_User");

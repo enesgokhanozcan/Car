@@ -7,6 +7,11 @@ namespace Car.DB.Entities
 {
     public partial class Category
     {
+        public Category()
+        {
+            Car = new HashSet<Car>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
@@ -18,5 +23,6 @@ namespace Car.DB.Entities
         public int? Uuser { get; set; }
 
         public virtual User IuserNavigation { get; set; }
+        public virtual ICollection<Car> Car { get; set; }
     }
 }

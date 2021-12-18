@@ -1,5 +1,6 @@
 using AutoMapper;
 using Car.API.Infrastructure;
+using Car.Service.Product;
 using Car.Service.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,7 @@ namespace Car.API
             IMapper mapper = _mappingProfile.CreateMapper();
             services.AddSingleton(mapper);
             services.AddTransient<IUserService,UserService>();
-            //services.AddTransient<ICarService, CarService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddMemoryCache();
             services.AddScoped<LoginFilter>();
             services.AddControllers();
