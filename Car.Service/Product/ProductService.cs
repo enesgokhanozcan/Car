@@ -45,7 +45,32 @@ namespace Car.Service.Product
 
         public General<ProductDetail> Pagination(int productPage, int displayPage)
         {
-            throw new NotImplementedException();
+            var result = new General<ProductDetail>();
+
+            decimal _totalCount = 0;
+            decimal _totalPage = 0;
+            using (var context = new CarContext())
+                {
+                    _totalCount = context.Car.Count();
+                    _totalPage = Math.Ceiling(_totalCount / productPage);
+                    if (productPage < 1 || productPage > _totalCount)
+                    {
+                        return null;
+                    }
+                    var _products = context.Car
+                                            .Where(x => !x.IsDeleted)
+                                            .OrderBy(i => i.Id)
+                                            .Skip((displayPage - 1) * productPage)
+                                            .Take(productPage).ToList();
+
+                    result.List = mapper.Map<List<ProductDetail>>(_products);
+                    result.IsSuccess = true;
+
+                    result.TotalCount = _totalCount;
+                    result.TotalPage = _totalPage;
+                }
+
+            return result;
         }
 
         public General<ProductDetail> Sort(string sortProduct)

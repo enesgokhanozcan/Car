@@ -11,5 +11,7 @@ namespace Car.Model
         public bool IsSuccess { get; set; }
         public T Entity { get; set; }
         public List<T> List { get; set; }
+        public decimal TotalCount { get; set; }
+        public decimal TotalPage { get; set; }
     }
 }
