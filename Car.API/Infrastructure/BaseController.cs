@@ -1,5 +1,4 @@
 ﻿using Car.Model.User;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -20,7 +19,7 @@ namespace Car.API.Infrastructure
                 return GetCurrentUser();
             }
         }
-        public UserViewModel GetCurrentUser()
+        private UserViewModel GetCurrentUser()
         {
             var response = new UserViewModel(); 
             if(memoryCache.TryGetValue(key: $"LoginUser", out UserViewModel loginuser))

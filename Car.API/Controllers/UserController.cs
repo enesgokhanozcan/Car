@@ -11,12 +11,12 @@ namespace Car.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public UserController(IUserService _userService, IMapper _mapper, IMemoryCache _memoryCache) //: base(_memoryCache)
+        public UserController(IUserService _userService, IMapper _mapper, IMemoryCache _memoryCache) : base(_memoryCache)
         {
             userService = _userService;
             mapper = _mapper;
@@ -25,11 +25,11 @@ namespace Car.API.Controllers
         [HttpPost]
         public General<UserViewModel> Insert([FromBody] UserCreateModel newUser)
         {
-            //General<UserViewModel> response = new General<UserViewModel>();
-            //if(CurrentUser is null)
-            //{
-            //    return response;
-            //}
+            General<UserViewModel> response = new();
+            if(CurrentUser is { Id: <= 0 })
+            {
+                return response;
+            }
             return userService.Insert(newUser);
         }
 

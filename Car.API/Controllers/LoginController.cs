@@ -4,6 +4,7 @@ using Car.Service.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace Car.API.Controllers
 {
@@ -28,7 +29,12 @@ namespace Car.API.Controllers
             {
                 if(!memoryCache.TryGetValue(key: $"LoginUser", out UserViewModel _loginuser))
                 {
-                    memoryCache.Set(key: $"LoginUser", response.Entity);
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                    {
+                        AbsoluteExpiration = DateTime.Now.AddHours(value: 1),
+                        Priority =CacheItemPriority.Normal,
+                    };
+                    memoryCache.Set(key: $"LoginUser", _response.Entity);
                 }
                 response.Entity = true;
             }
