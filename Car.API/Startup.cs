@@ -33,7 +33,9 @@ namespace Car.API
             IMapper mapper = _mappingProfile.CreateMapper();
             services.AddSingleton(mapper);
             services.AddTransient<IUserService,UserService>();
+            //services.AddTransient<ICarService, CarService>();
             services.AddMemoryCache();
+            services.AddScoped<LoginFilter>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

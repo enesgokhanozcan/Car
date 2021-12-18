@@ -23,13 +23,14 @@ namespace Car.API.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(LoginFilter))]
         public General<UserViewModel> Insert([FromBody] UserCreateModel newUser)
         {
             General<UserViewModel> response = new();
-            if(CurrentUser is { Id: <= 0 })
-            {
-                return response;
-            }
+            //if(CurrentUser is { Id: <= 0 })
+            //{
+            //    return response;
+            //}
             return userService.Insert(newUser);
         }
 
