@@ -33,5 +33,23 @@ namespace Car.API.Controllers
             General<ProductDetail> response = new();
             return response;
         }
+        [HttpGet]
+        [Route("Sort")]
+        public General<ProductDetail> Sort([FromQuery] string sortProduct)
+        {
+            return productService.Sort(sortProduct);
+        }
+        [HttpGet]
+        [Route("Filter")]
+        public General<ProductDetail> Filter([FromQuery] string filterProduct)
+        {
+            return productService.Filter(filterProduct);
+        }
+        [HttpGet]
+        [Route("Pagination")]
+        public General<ProductDetail> Pagination([FromQuery] int productPage, [FromQuery] int displayPage)
+        {
+            return productService.Pagination(productPage, displayPage);
+        }
     }
 }
