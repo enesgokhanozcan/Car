@@ -1,7 +1,10 @@
 using AutoMapper;
 using Car.API.Infrastructure;
+using Car.API.Jobs;
 using Car.Service.Product;
 using Car.Service.User;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +35,14 @@ namespace Car.API
         {
             var _mappingProfile = new MapperConfiguration(mp => { mp.AddProfile(new MappingProfile()); });
             IMapper mapper = _mappingProfile.CreateMapper();
+            services.AddHangfire(config =>
+                        config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                        .UseSimpleAssemblyNameTypeSerializer()
+                        .UseDefaultTypeSerializer()
+                        .UseMemoryStorage());
+
+            services.AddHangfireServer();
+            services.AddSingleton<IPrintJob, PrintJob>();
             services.AddSingleton(mapper);
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IProductService, ProductService>();
@@ -45,7 +56,7 @@ namespace Car.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IBackgroundJobClient backgroundJobClient,IRecurringJobManager recurringJobManager,IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -64,6 +75,10 @@ namespace Car.API
             {
                 endpoints.MapControllers();
             });
+            app.UseHangfireDashboard();
+            backgroundJobClient.Enqueue(() => Console.WriteLine("Hello World"));
+            recurringJobManager.AddOrUpdate("Run every login",() => serviceProvider.GetService<IPrintJob>().Print (),
+                Cron.Daily);
         }
     }
 }
