@@ -10,9 +10,10 @@ namespace Car.Service.Product
 {
     public interface IProductService
     {
-        public General<ListProduct> List();
-        public General<ProductDetail> Insert(InsertProduct newProduct);
-        public General<ProductDetail> GetById();
+        public General<ListProduct> List(int pageSize, int currentPage);
+        public General<ProductDetail> Insert(InsertProduct newCar);
+        public General<ProductDetail> Update(InsertProduct updateCar);
+        public General<ProductDetail> GetProducts();
         public General<ProductDetail> Sort(string sortProduct);
         public General<ProductDetail> Filter(string filterProduct);
         public General<ProductDetail> Pagination(int productPage, int displayPage);

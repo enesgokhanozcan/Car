@@ -16,15 +16,33 @@ namespace Car.Service.Product
         {
             mapper = _mapper;
         }
-        public General<ProductDetail> GetById()
+        public General<ProductDetail> GetProducts()
         {
-            throw new NotImplementedException();
+            var result = new General<ProductDetail>();
+
+            using (var context = new CarContext())
+            {
+                var data = context.Car.
+                            Where(x => !x.IsActive && !x.IsDeleted).
+                            OrderBy(x => x.Id);
+                if (data.Any())
+                {
+                    result.List = mapper.Map<List<ProductDetail>>(data);
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    return result;
+                }
+            }
+
+            return result;
         }
 
-        public General<ProductDetail> Insert(InsertProduct newProduct)
+        public General<ProductDetail> Insert(InsertProduct newCar)
         {
             var result = new General<ProductDetail>() { IsSuccess = false };
-            var model = mapper.Map<Car.DB.Entities.Car>(newProduct);
+            var model = mapper.Map<Car.DB.Entities.Car>(newCar);
             using (var srv = new CarContext())
             {
                 model.Idate = System.DateTime.Now;
@@ -37,10 +55,35 @@ namespace Car.Service.Product
             }
             return result;
         }
-
-        public General<ListProduct> List()
+        public General<ProductDetail> Update(InsertProduct updateCar)
         {
-            throw new NotImplementedException();
+            var result = new General<ProductDetail>() { IsSuccess = false };
+            var updateModel = mapper.Map<Car.DB.Entities.Car>(updateCar);
+            using (var srv = new CarContext())
+            {
+                var currentModel = srv.Car.Find(updateCar.Id);
+                updateModel.Idate = currentModel.Idate;
+                srv.Car.Add(updateModel);
+                srv.SaveChanges();
+                result.Entity = mapper.Map<ProductDetail>(updateModel);
+                result.IsSuccess = true;
+            }
+            return result;
+        }
+
+
+        public General<ListProduct> List(int pageSize,int currentPage)
+        {
+            var result = new General<ListProduct>() { IsSuccess = false };
+            using (var srv = new CarContext())
+            {
+                var _result = srv.Car.Where(w => w.IsActive && !w.IsDeleted);
+                //_result = String.IsNullOrEmpty(nameStartsWith) ? _result:_result.Where(w => w.Name.StartsWith(nameStartsWith));
+                //_result = !Desc ? _result.OrderByDescending(w => w.Id) : _result.OrderBy(w => w.Id);
+                _result = _result.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                result.List = mapper.Map<List<ListProduct>>(_result);
+            }
+            return result;
         }
 
         public General<ProductDetail> Pagination(int productPage, int displayPage)

@@ -1,4 +1,5 @@
-﻿using Car.Model;
+﻿using Car.API.Infrastructure;
+using Car.Model;
 using Car.Model.Product;
 using Car.Service.Product;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +16,34 @@ namespace Car.API.Controllers
             productService = _productService;
         }
         [HttpPost]
+        [Route("Insert")]
         public General<ProductDetail> Insert([FromBody] InsertProduct newCar)
         {
             General<ProductDetail> response = new();
             response = productService.Insert(newCar);
             return response;
         }
+        [HttpPut]
+        [Route("Update")]
+        public General<ProductDetail> Update([FromBody] InsertProduct updateCar)
+        {
+            General<ProductDetail> response = new();
+            response = productService.Update(updateCar);
+            return response;
+        }
         [HttpGet]
-        public General<ListProduct> GetList()
+        [Route("List")]
+        public General<ListProduct> List([FromBody] int pageSize,int currentPage)
         {
             General<ListProduct> response = new();
+            response = productService.List(pageSize,currentPage);
             return response;
+        }
+        [HttpGet]
+        [Route("Listing")]
+        public General<ProductDetail> GetProducts()
+        {
+            return productService.GetProducts();
         }
         [HttpGet("{id:int}")]
         public General<ProductDetail> GetById(int id)
